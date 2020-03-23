@@ -1,0 +1,55 @@
+buildscript {
+    ext {
+        springBootVersion = '2.2.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group 'example'
+version '1.0-SNAPSHOT'
+
+bootJar {
+    archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+}
+
+sourceCompatibility = 12
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'com.h2database:h2'
+
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        //exclude group: 'junit', module: 'junit'
+    }
+
+    //testImplementation('junit:junit:4.10')
+    testImplementation('io.rest-assured:rest-assured:3.0.3')
+    testImplementation('com.github.tomakehurst:wiremock:2.25.1')
+    testImplementation('au.com.dius:pact-jvm-consumer-junit:4.0.1')
+    testImplementation('au.com.dius:pact-jvm-provider-spring:4.0.1')
+}
+
+test {
+    useJUnitPlatform()
+}
